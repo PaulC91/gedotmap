@@ -1,5 +1,6 @@
 library(leaflet)
 
+# load data previously generated with data_gen_script.R to the environment
 load("Data/shinydata.RData")
 
 function(input, output) {
@@ -7,6 +8,7 @@ function(input, output) {
   pal <- c("#0087DC", "#DC241F", "#FCBB30", "#70147A", "#78B943", "#FFFF00")
   cols <- colorFactor(pal, domain = dots.final[[6]]$Party)
   
+  # get different zoom levels for different regions
   zoom <- reactive(
     if (input$region == "London") {
       10
@@ -35,7 +37,7 @@ function(input, output) {
                   highlightOptions = highlightOptions(
                     color = "white", weight = 3, opacity = 1, bringToFront = T),
                   label = ~PCONNAME, 
-                  popup = popup(), popupOptions = popupOptions(style = list("color" = "black")))
+                  popup = popup()) #popup text is grey, any way to make it black?
   })
   
   observe({

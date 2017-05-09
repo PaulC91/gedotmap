@@ -42,8 +42,8 @@ dots.final <- lapply(1:length(selected.regions), function(i) {
     dfs[[i]]$Party <- parties[i]
   }
   
-  dots.final <- bind_rows(dfs) #%>%
-  dots.final$Party <- factor(dots.final$Party, levels = parties)
+  dots.final <- bind_rows(dfs) %>% 
+    mutate(Party = factor(Party, levels = parties))
   
   return(dots.final)
 })

@@ -33,7 +33,7 @@ navbarPage("The Colours of The 2015 Electorate",
                     fluidRow(
                       column(12,
                              wellPanel(
-                               includeMarkdown("about.Rmd"))
+                               includeMarkdown("README.md"))
                       
                       )
                     ))
