@@ -1,5 +1,3 @@
-Visit the app [here.](https://datasetfree-apps.co.uk/apps/gedotmap/)
-
 #### Background
 
 We wanted to build a different kind of electorate map that could provide a better visual representation of voter density and diversity at a single glance.
@@ -17,11 +15,15 @@ The app was built with R, utilising the leaflet package and Shiny. You can view 
 
 Plotting all dots at once was causing a lot of browser meltdown, hence the region splits. But it's still pretty slow :(
 
-To limit the number of colours on the map, we've only included votes for the 6 largest parties in the UK by voter count. Northern Ireland has therefore been removed as a region option.
+To limit the number of colours on the map, for general election results, we've only included votes for the 6 largest parties in the UK by voter count. Northern Ireland has therefore been removed as a region option.
 
 Voter numbers for each constituency are divided by 100. The resulting number of dots are then randomly distributed within the constituency boundaries, colour-coded by party. 
 
 For example, Labour received 30,633 votes in Hackney South & Shoreditch in 2015, so there will be 306 red dots (rounded to nearest integer) randomly spread across that area. The exact location of each dot therefore does not have any significant meaning.
+
+The number of **EU Ref** dots for Leave and Remain votes in each constituency were estimated (very crudely) in the follwing way:  
+*((18+ Population 2015 figure &ast; 0.722) &ast; % Leave/Remain Estimate) / 100*  
+With 0.722 being the average voter turnout % in the EU ref and the resulting figure representing 100 votes.
 
 A note on zoom levels: it is best to view high density (urban) areas at a closer zoom level to avoid the order in which dots are plotted having an influence in the colour blend (Green dots will have more prominence from wider zooms because they are plotted last and will therefore cover dots below them).
 
@@ -29,5 +31,7 @@ A note on zoom levels: it is best to view high density (urban) areas at a closer
 #### Credits
 
 Thanks to [Alasdair Rae](https://twitter.com/undertheraedar) for making his excellent constituency shapefile available with all data embedded. You can find the full breakdown of sources on his [blog post.](http://www.statsmapsnpix.com/2017/04/getting-ready-for-ge2017-big-shapefile.html)
+
+EU Referendum % esitmates for each constituency were computed by [Chris Hanretty.](https://twitter.com/chrishanretty) Read his [blog post](https://medium.com/@chrishanretty/final-estimates-of-the-leave-vote-or-areal-interpolation-and-the-uks-referendum-on-eu-membership-5490b6cab878) that summarises the findings of his academic article "Areal Interpolation and the UK's referendum on EU Membership", *Journal Of Elections, Public Opinion And Parties,* accesible [here.](http://www.tandfonline.com/doi/abs/10.1080/17457289.2017.1287081?journalCode=fbep20)
 
 For more information about [Culture of Insight](http://cultureofinsight.com) get in touch via [email](mailto:paul@cultureofinsight.com) or twitter [@datasetfree](https://twitter.com/datasetfree)
