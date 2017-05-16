@@ -8,13 +8,17 @@ regions <- c("East", "East Midlands", "London", "North East", "North West",
              "Scotland", "South East", "South West", "Wales", "West Midlands",
              "Yorkshire and The Humber")
 
-uk <- readOGR(dsn = "uk_650_wpc_2017_full_res_v1.9.shp") %>%
+uk <- readOGR(dsn = "uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.shp") %>%
   spTransform(CRS("+proj=longlat +datum=WGS84"))
 
 # data gen for each region ------------------------
 
 selected.regions <- lapply(regions, function(x) {
-  uk[uk$REGN == x,]
+  region <- uk[uk$REGN == x,]
+  #region.df <- tidy(region)
+  #region@data$id <- row.names(region@data)
+  #region.points <- fortify(region, region = "id")
+  #region.df <- merge(region.points, region@data, by = "id")
 })
 names(selected.regions) <- regions
 
