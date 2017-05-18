@@ -30,9 +30,9 @@ names(centroids) <- regions
 ge.dots <- lapply(1:length(selected.regions), function(i) {
   
   if (sum(selected.regions[[i]]@data$SNP > 0)) {
-    num.dots <- select(selected.regions[[i]]@data, CON:SNP) / 100
+    num.dots <- select(selected.regions[[i]]@data, CON:SNP) / 500
   } else {
-    num.dots <- select(selected.regions[[i]]@data, CON:GREEN) / 100
+    num.dots <- select(selected.regions[[i]]@data, CON:GREEN) / 500
   }
   
   sp.dfs <- lapply(names(num.dots), function(x) {
@@ -59,8 +59,8 @@ brexit.dots <- lapply(1:length(selected.regions), function(i) {
   
   num.dots <- select(selected.regions[[i]]@data, POP18PLU15, EUHANLEAVE, EUHANREM) %>%
     mutate(POP18PLU15 = as.numeric(levels(POP18PLU15))[POP18PLU15]) %>%
-    mutate(Leave = as.integer(((POP18PLU15 * 0.722) * EUHANLEAVE) / 100),
-           Remain = as.integer(((POP18PLU15 * 0.722) * EUHANREM) / 100)) %>%
+    mutate(Leave = as.integer(((POP18PLU15 * 0.722) * EUHANLEAVE) / 500),
+           Remain = as.integer(((POP18PLU15 * 0.722) * EUHANREM) / 500)) %>%
     select(Leave, Remain)
   
   sp.dfs <- lapply(names(num.dots), function(x) {

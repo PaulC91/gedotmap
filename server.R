@@ -2,7 +2,7 @@ library(leaflet)
 library(scales)
 
 # load data previously generated with data_gen_script.R to the environment
-load("Data/newdata.RData")
+load("Data/500data.RData")
 
 function(input, output) {
   
@@ -64,10 +64,10 @@ function(input, output) {
                                      color = "white", weight = 3, opacity = 1, bringToFront = T),
                                    label = ~PCONNAME, 
                                    popup = popup()) %>%
-                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 50, 
+                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 150, 
                                   fillColor = ~cols(Party), stroke = FALSE, fillOpacity = 0.8) %>%
                        addLegend("topright", pal = cols, values = ~Party,
-                                 title = "1 Dot = 100 Votes", opacity = 1, layerId = "legend")
+                                 title = "1 Dot = 500 Votes", opacity = 1, layerId = "legend")
                    })
     } else {
       pal <- c("RoyalBlue", "Yellow")
@@ -86,10 +86,10 @@ function(input, output) {
                                      color = "white", weight = 3, opacity = 1, bringToFront = T),
                                    label = ~PCONNAME, 
                                    popup = popup()) %>%
-                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 50, 
+                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 150, 
                                   fillColor = ~cols(Party), stroke = FALSE, fillOpacity = 0.8) %>%
                        addLegend("topright", pal = cols, values = ~Party,
-                                 title = "1 Dot = 100 Votes", opacity = 1, layerId = "legend")
+                                 title = "1 Dot = 500 Votes", opacity = 1, layerId = "legend")
                    })
     }
   })

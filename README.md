@@ -1,3 +1,5 @@
+View the app [here.](https://cultureofinsight.shinyapps.io/dotmap/)
+
 #### Background
 
 We wanted to build a different kind of electorate map that could provide a better visual representation of voter density and diversity at a single glance.
@@ -17,13 +19,13 @@ Plotting all dots at once was causing a lot of browser meltdown, hence the regio
 
 To limit the number of colours on the map, for general election results, we've only included votes for the 6 largest parties in the UK by voter count. Northern Ireland has therefore been removed as a region option.
 
-Voter numbers for each constituency are divided by 100. The resulting number of dots are then randomly distributed within the constituency boundaries, colour-coded by party. 
+Voter numbers for each constituency are divided by 500. The resulting number of dots are then randomly distributed within the constituency boundaries, colour-coded by party. 
 
-For example, Labour received 30,633 votes in Hackney South & Shoreditch in 2015, so there will be 306 red dots (rounded to nearest integer) randomly spread across that area. The exact location of each dot therefore does not have any significant meaning.
+For example, Labour received 30,633 votes in Hackney South & Shoreditch in 2015, so there will be 61 red dots (rounded to nearest integer) randomly spread across that area. The exact location of each dot therefore does not have any significant meaning.
 
 The number of **EU Ref** dots for Leave and Remain votes in each constituency were estimated (very crudely) in the follwing way:  
-*((18+ Population 2015 figure &ast; 0.722) &ast; % Leave/Remain Estimate) / 100*  
-With 0.722 being the average voter turnout % in the EU ref and the resulting figure representing 100 votes.
+*((18+ Population 2015 figure &ast; 0.722) &ast; % Leave/Remain Estimate) / 500*  
+With 0.722 being the average voter turnout % in the EU ref and the resulting figure representing 500 votes.
 
 A note on zoom levels: it is best to view high density (urban) areas at a closer zoom level to avoid the order in which dots are plotted having an influence in the colour blend (Green dots will have more prominence from wider zooms because they are plotted last and will therefore cover dots below them).
 
