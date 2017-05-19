@@ -1,12 +1,56 @@
 library(leaflet)
+library(ggplot2)
+library(dplyr)
 library(scales)
+library(hrbrthemes)
 
 # load data previously generated with data_gen_script.R to the environment
-load("Data/500data.RData")
+load("Data/250data.RData")
 
 function(input, output) {
   
-  # get different zoom levels for different regions
+  dots.final <-reactive(
+    if (input$vote == "General Election 2015") {
+      ge.dots
+    } else {
+      brexit.dots
+    }
+  )
+  
+  dotsInBounds <-reactive({
+    if (is.null(input$map_bounds))
+      return(NULL)
+    bounds <- input$map_bounds
+    latRng <- range(bounds$north, bounds$south)
+    lngRng <- range(bounds$east, bounds$west)
+    
+    subset(dots.final()[[input$region]],
+           y >= latRng[1] & y <= latRng[2] &
+             x >= lngRng[1] & x <= lngRng[2])
+  })
+  
+  votes <- reactive(
+    count(dotsInBounds(), Party) %>%
+      mutate(Votes = (n * 250)) %>%
+      select(Party, Votes)
+  )
+  
+  pal <-reactive(
+    if (input$vote == "General Election 2015") {
+      c("#0087DC", "#DC241F", "#FCBB30", "#70147A", "#78B943", "#FFFF00")
+    } else {
+      c("RoyalBlue", "Yellow")
+    }
+  )
+  
+  cols <-reactive(
+    if (input$vote == "General Election 2015") {
+      colorFactor(pal(), domain = ge.dots[[6]]$Party)
+    } else {
+      colorFactor(pal(), domain = brexit.dots[[1]]$Party)
+    }
+  )
+  
   zoom <- reactive(
     if (input$region == "London") {
       11
@@ -42,56 +86,46 @@ function(input, output) {
   
   output$map <- renderLeaflet({
     leaflet(selected.regions[[input$region]]) %>%
-      addProviderTiles("CartoDB.DarkMatter", options = tileOptions(minZoom = 7)) %>% 
-      setView(centroids[[input$region]]$x, centroids[[input$region]]$y, zoom = zoom())
+      addProviderTiles("CartoDB.DarkMatter", 
+                       options = tileOptions(minZoom = 7, maxZoom = 13)) %>% 
+      setView(centroids[[input$region]]$x + 0.05, centroids[[input$region]]$y, zoom = zoom())
   })
   
   observe({
-    if (input$vote == "General Election 2015") {
-      pal <- c("#0087DC", "#DC241F", "#FCBB30", "#70147A", "#78B943", "#FFFF00")
-      cols <- colorFactor(pal, domain = ge.dots[[6]]$Party)
       withProgress(message = 'Plotting dots',
                    detail = 'This may take a while...',
                    value = 0, {
                      for (i in 1:15) {
                        incProgress(1/15)
                      }
-                     leafletProxy("map", data = ge.dots[[input$region]]) %>%
+                     leafletProxy("map", data = dots.final()[[input$region]]) %>%
                        clearShapes() %>%
                        addPolygons(data = selected.regions[[input$region]], 
                                    stroke = T, color = "grey", weight = 1, opacity = .1, fillOpacity = 0,
                                    highlightOptions = highlightOptions(
-                                     color = "white", weight = 3, opacity = 1, bringToFront = T),
+                                     color = "white", weight = 2, opacity = 1, bringToFront = T),
                                    label = ~PCONNAME, 
                                    popup = popup()) %>%
-                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 150, 
-                                  fillColor = ~cols(Party), stroke = FALSE, fillOpacity = 0.8) %>%
-                       addLegend("topright", pal = cols, values = ~Party,
-                                 title = "1 Dot = 500 Votes", opacity = 1, layerId = "legend")
+                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 80, 
+                                  fillColor = ~cols()(Party), stroke = FALSE, fillOpacity = 1) %>%
+                       addLegend("bottomleft", pal = cols(), values = ~Party,
+                                 title = "1 Dot = 250 Votes", opacity = 1, layerId = "legend")
                    })
-    } else {
-      pal <- c("RoyalBlue", "Yellow")
-      cols <- colorFactor(pal, domain = brexit.dots[[1]]$Party)
-      withProgress(message = 'Plotting dots',
-                   detail = 'This may take a while...',
-                   value = 0, {
-                     for (i in 1:15) {
-                       incProgress(1/15)
-                     }
-                     leafletProxy("map", data = brexit.dots[[input$region]]) %>%
-                       clearShapes() %>%
-                       addPolygons(data = selected.regions[[input$region]], 
-                                   stroke = T, color = "grey", weight = 1, opacity = .1, fillOpacity = 0,
-                                   highlightOptions = highlightOptions(
-                                     color = "white", weight = 3, opacity = 1, bringToFront = T),
-                                   label = ~PCONNAME, 
-                                   popup = popup()) %>%
-                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 150, 
-                                  fillColor = ~cols(Party), stroke = FALSE, fillOpacity = 0.8) %>%
-                       addLegend("topright", pal = cols, values = ~Party,
-                                 title = "1 Dot = 500 Votes", opacity = 1, layerId = "legend")
-                   })
-    }
+  })
+  
+  output$bar <- renderPlot({
+    if (is.null(input$map_bounds))
+      return(NULL)
+    ggplot(votes(), aes(x=Party, y = Votes, fill = Party)) +
+      geom_bar(stat = "identity") +
+      scale_fill_manual(values = pal()) +
+      theme_ipsum_rc() +
+      labs(subtitle = "Votes within map bounds (c.)") +
+      theme(plot.background = element_rect(fill = '#272b30'), legend.position = "none",
+            text = element_text(colour = "white"), axis.text = element_text(colour = "white"),
+            axis.title = element_blank(), panel.border = element_blank(),
+            plot.margin = unit(c(.5,.5,.5,.2), "cm")) + 
+      scale_y_comma()
   })
   
 }

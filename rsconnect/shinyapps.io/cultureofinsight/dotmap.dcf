@@ -3,9 +3,9 @@ title: dotmap
 account: cultureofinsight
 server: shinyapps.io
 appId: 180795
-bundleId: 830968
+bundleId: 833464
 url: https://cultureofinsight.shinyapps.io/dotmap/
-when: 1495032615.28084
+when: 1495188321.62476
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: data_gen_script.R|uk_650_wpc_2017_full_res_v1.9.shp|Data/newdata.RData|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.dbf|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.prj|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.qml|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.shp|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.shx
+ignoredFiles: data_gen_script.R|ui_backup.R|ui_backup2.R|uk_650_wpc_2017_full_res_v1.9.shp|Data/500data.RData|Data/newdata.RData|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.dbf|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.prj|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.qml|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.shp|uk_650_wpc_2017_low_res_v1.9/uk_650_wpc_2017_low_res_v1.9.shx
