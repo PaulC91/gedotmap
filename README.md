@@ -1,3 +1,5 @@
+View the app [here.](https://cultureofinsight.shinyapps.io/dotmap/)
+
 #### Background
 
 We wanted to build a different kind of electorate map that could provide a better visual representation of voter density and diversity at a single glance.
