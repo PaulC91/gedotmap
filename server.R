@@ -1,17 +1,20 @@
 library(leaflet)
+library(leaflet.extras)
 library(ggplot2)
 library(dplyr)
 library(scales)
 library(hrbrthemes)
 
 # load data previously generated with data_gen_script.R to the environment
-load("Data/250data.RData")
+load("Data/250data_2017.RData")
 
 function(input, output) {
   
   dots.final <-reactive(
-    if (input$vote == "General Election 2015") {
-      ge.dots
+    if (input$vote == "General Election 2017") {
+      ge.dots.2017
+    } else if (input$vote == "General Election 2015") {
+      ge.dots.2015
     } else {
       brexit.dots
     }
@@ -36,18 +39,22 @@ function(input, output) {
   )
   
   pal <-reactive(
-    if (input$vote == "General Election 2015") {
-      c("#0087DC", "#DC241F", "#FCBB30", "#70147A", "#78B943", "#FFFF00")
-    } else {
+    if (input$vote == "EU Referendum 2016") {
       c("RoyalBlue", "Yellow")
+    } else if (input$region == "Scotland") {
+      c("#FFFF00", "#0087DC", "#DC241F", "#FCBB30", "#70147A", "#78B943")
+    } else {
+      c("#0087DC", "#DC241F", "#FCBB30", "#70147A", "#78B943")
     }
   )
   
   cols <-reactive(
-    if (input$vote == "General Election 2015") {
-      colorFactor(pal(), domain = ge.dots[[6]]$Party)
-    } else {
+    if (input$vote == "EU Referendum 2016") {
       colorFactor(pal(), domain = brexit.dots[[1]]$Party)
+    } else if (input$region == "Scotland") {
+      colorFactor(pal(), domain = ge.dots.2015[[6]]$Party)
+    } else {
+      colorFactor(pal(), levels = c("CON", "LAB", "LD", "UKIP", "GREEN"))
     }
   )
   
@@ -65,14 +72,22 @@ function(input, output) {
   )
   
   popup <- reactive(
-    if (input$vote == "General Election 2015") {
+    if (input$vote == "General Election 2017") {
+      paste0("Winner: ",             
+             selected.regions[[input$region]]$WINNER_2017,
+             "<br>Second: ", 
+             selected.regions[[input$region]]$SECOND_2017
+             ,"<br>Majority: ", 
+             selected.regions[[input$region]]$MAJ_2017
+      )
+    } else if (input$vote == "General Election 2015") {
       paste0("Winner: ",             
              selected.regions[[input$region]]$WINNER,
              "<br>Second: ", 
              selected.regions[[input$region]]$SECOND
              ,"<br>Majority: ", 
              selected.regions[[input$region]]$MAJ
-      )
+      )  
     } else {
       paste0("Probable Constituency Vote",
              "<br>Leave: ", 
@@ -86,9 +101,10 @@ function(input, output) {
   
   output$map <- renderLeaflet({
     leaflet(selected.regions[[input$region]]) %>%
-      addProviderTiles("CartoDB.DarkMatter", 
-                       options = tileOptions(minZoom = 7, maxZoom = 13)) %>% 
-      setView(centroids[[input$region]]$x + 0.05, centroids[[input$region]]$y, zoom = zoom())
+      addProviderTiles("CartoDB.DarkMatter",
+        options = tileOptions(minZoom = 7, maxZoom = 13)) %>% 
+      setView(centroids[[input$region]]$x + 0.05, centroids[[input$region]]$y, zoom = zoom()) %>%
+      addFullscreenControl
   })
   
   observe({
@@ -106,7 +122,7 @@ function(input, output) {
                                      color = "white", weight = 2, opacity = 1, bringToFront = T),
                                    label = ~PCONNAME, 
                                    popup = popup()) %>%
-                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 80, 
+                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 100, 
                                   fillColor = ~cols()(Party), stroke = FALSE, fillOpacity = 1) %>%
                        addLegend("bottomleft", pal = cols(), values = ~Party,
                                  title = "1 Dot = 250 Votes", opacity = 1, layerId = "legend")
