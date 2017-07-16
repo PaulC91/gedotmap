@@ -7300,3 +7300,12 @@ div.outer {
   opacity: 0.95;
   transition-delay: 0;
 }
+
+.leaflet-popup-content-wrapper {
+  color: white;
+  font-family: 'Roboto Condensed';
+  font-weight: bold;
+  font-size: 16px;
+  background-color: black; /* The Fallback */
+  background-color: rgba(0,0,0,0.5)
+}

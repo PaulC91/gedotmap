@@ -40,11 +40,11 @@ function(input, output) {
   
   pal <-reactive(
     if (input$vote == "EU Referendum 2016") {
-      c("RoyalBlue", "Yellow")
+      c("Leave" = "RoyalBlue", "Remain" = "Yellow")
     } else if (input$region == "Scotland") {
-      c("#FFFF00", "#0087DC", "#DC241F", "#FCBB30", "#70147A", "#78B943")
+      c("SNP" = "#FFFF00", "CON" = "#0087DC", "LAB" = "#DC241F", "LD" = "#FCBB30", "UKIP" = "#70147A", "GREEN" = "#78B943")
     } else {
-      c("#0087DC", "#DC241F", "#FCBB30", "#70147A", "#78B943")
+      c("CON" = "#0087DC", "LAB" = "#DC241F", "LD" = "#FCBB30", "UKIP" = "#70147A", "GREEN" = "#78B943")
     }
   )
   
@@ -71,9 +71,20 @@ function(input, output) {
     }
   )
   
+  radiuses <- reactive(
+    if (zoom() %in% 7:9) {
+      80
+    } else if (zoom() %in% 10:11){
+      40
+    } else {
+      10
+    }
+  )
+  
   popup <- reactive(
     if (input$vote == "General Election 2017") {
-      paste0("Winner: ",             
+      paste0(selected.regions[[input$region]]$PCONNAME,
+             "<br>Winner: ",             
              selected.regions[[input$region]]$WINNER_2017,
              "<br>Second: ", 
              selected.regions[[input$region]]$SECOND_2017
@@ -81,7 +92,8 @@ function(input, output) {
              selected.regions[[input$region]]$MAJ_2017
       )
     } else if (input$vote == "General Election 2015") {
-      paste0("Winner: ",             
+      paste0(h6(selected.regions[[input$region]]$PCONNAME),
+             "<br>Winner: ",             
              selected.regions[[input$region]]$WINNER,
              "<br>Second: ", 
              selected.regions[[input$region]]$SECOND
@@ -89,7 +101,8 @@ function(input, output) {
              selected.regions[[input$region]]$MAJ
       )  
     } else {
-      paste0("Probable Constituency Vote",
+      paste0(h6(selected.regions[[input$region]]$PCONNAME),
+             "<br>Estimated Constituency Vote",
              "<br>Leave: ", 
              percent(selected.regions[[input$region]]$EUHANLEAVE)
              ,"<br>Remain: ", 
@@ -122,7 +135,7 @@ function(input, output) {
                                      color = "white", weight = 2, opacity = 1, bringToFront = T),
                                    label = ~PCONNAME, 
                                    popup = popup()) %>%
-                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = 100, 
+                       addCircles(lng = ~x, lat = ~y, weight = 1, radius = radiuses(), 
                                   fillColor = ~cols()(Party), stroke = FALSE, fillOpacity = 1) %>%
                        addLegend("bottomleft", pal = cols(), values = ~Party,
                                  title = "1 Dot = 250 Votes", opacity = 1, layerId = "legend")
