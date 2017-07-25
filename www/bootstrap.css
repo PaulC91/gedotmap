@@ -7301,11 +7301,11 @@ div.outer {
   transition-delay: 0;
 }
 
-.leaflet-popup-content-wrapper {
+.leaflet-popup-content-wrapper, .leaflet-label {
   color: white;
   font-family: 'Roboto Condensed';
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   background-color: black; /* The Fallback */
-  background-color: rgba(0,0,0,0.5)
+  background-color: rgba(0,0,0,0.7)
 }

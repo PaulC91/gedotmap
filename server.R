@@ -90,24 +90,24 @@ function(input, output) {
              selected.regions[[input$region]]$SECOND_2017
              ,"<br>Majority: ", 
              selected.regions[[input$region]]$MAJ_2017
-      )
+      ) %>% lapply(htmltools::HTML)
     } else if (input$vote == "General Election 2015") {
-      paste0(h6(selected.regions[[input$region]]$PCONNAME),
+      paste0(selected.regions[[input$region]]$PCONNAME,
              "<br>Winner: ",             
              selected.regions[[input$region]]$WINNER,
              "<br>Second: ", 
              selected.regions[[input$region]]$SECOND
              ,"<br>Majority: ", 
              selected.regions[[input$region]]$MAJ
-      )  
+      ) %>% lapply(htmltools::HTML)
     } else {
-      paste0(h6(selected.regions[[input$region]]$PCONNAME),
+      paste0(selected.regions[[input$region]]$PCONNAME,
              "<br>Estimated Constituency Vote",
              "<br>Leave: ", 
              percent(selected.regions[[input$region]]$EUHANLEAVE)
              ,"<br>Remain: ", 
              percent(selected.regions[[input$region]]$EUHANREM)
-      )
+      ) %>% lapply(htmltools::HTML)
     }
     
   )
@@ -133,7 +133,8 @@ function(input, output) {
                                    stroke = T, color = "grey", weight = 1, opacity = .1, fillOpacity = 0,
                                    highlightOptions = highlightOptions(
                                      color = "white", weight = 2, opacity = 1, bringToFront = T),
-                                   label = ~PCONNAME, 
+                                   label = popup(),
+                                   labelOptions = labelOptions(textsize = "14px"), #~PCONNAME, 
                                    popup = popup()) %>%
                        addCircles(lng = ~x, lat = ~y, weight = 1, radius = radiuses(), 
                                   fillColor = ~cols()(Party), stroke = FALSE, fillOpacity = 1) %>%

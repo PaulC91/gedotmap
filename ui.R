@@ -44,7 +44,7 @@ navbarPage("The Colours of The Electorate",
                     fluidRow(
                       column(12,
                              wellPanel(
-                               includeMarkdown("README.md"))
+                               includeMarkdown("about.md"))
                             )
                             )
                     )
