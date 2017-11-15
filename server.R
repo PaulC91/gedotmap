@@ -1,5 +1,6 @@
 library(leaflet)
 library(leaflet.extras)
+library(leaflet.mapbox)
 library(ggplot2)
 library(dplyr)
 library(scales)
@@ -113,9 +114,15 @@ function(input, output) {
   )
   
   output$map <- renderLeaflet({
-    leaflet(selected.regions[[input$region]]) %>%
-      addProviderTiles("CartoDB.DarkMatter",
-        options = tileOptions(minZoom = 7, maxZoom = 13)) %>% 
+    
+    #token <- "pk.eyJ1IjoiY3VsdHVyZW9maW5zaWdodCIsImEiOiJjajV4cnJ6NzMwNHI5MnFwZ3E4cDFsMTBuIn0.I2QzkctPro7acqZBVaJ7Nw"
+    maptile <- "https://api.mapbox.com/styles/v1/cultureofinsight/cj5xt18s90hzq2rpcfk612vkq/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY3VsdHVyZW9maW5zaWdodCIsImEiOiJjajV4cnJ6NzMwNHI5MnFwZ3E4cDFsMTBuIn0.I2QzkctPro7acqZBVaJ7Nw"
+    #map <- paste0(maptile, token)
+    mapattr <- '© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+    
+    leaflet(data = selected.regions[[input$region]]) %>%
+      #addProviderTiles("CartoDB.DarkMatter", options = tileOptions(minZoom = 7, maxZoom = 13)) %>%
+      addTiles(urlTemplate = maptile, attribution = mapattr, options = tileOptions(minZoom = 7, maxZoom = 13)) %>% 
       setView(centroids[[input$region]]$x + 0.05, centroids[[input$region]]$y, zoom = zoom()) %>%
       addFullscreenControl
   })
